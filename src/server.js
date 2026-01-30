@@ -159,6 +159,9 @@ async function startGateway() {
     stdio: "inherit",
     env: {
       ...process.env,
+      // Override HOME so OpenClaw's ~/.openclaw resolves to our STATE_DIR.
+      // This ensures config, canvas, and other paths all use /data/.openclaw.
+      HOME: path.dirname(STATE_DIR),
       OPENCLAW_STATE_DIR: STATE_DIR,
       OPENCLAW_WORKSPACE_DIR: WORKSPACE_DIR,
       OPENCLAW_CONFIG_PATH: configPath(),
@@ -504,6 +507,8 @@ function runCmd(cmd, args, opts = {}) {
       ...opts,
       env: {
         ...process.env,
+        // Override HOME so OpenClaw's ~/.openclaw resolves to our STATE_DIR.
+        HOME: path.dirname(STATE_DIR),
         OPENCLAW_STATE_DIR: STATE_DIR,
         OPENCLAW_WORKSPACE_DIR: WORKSPACE_DIR,
         OPENCLAW_CONFIG_PATH: configPath(),
