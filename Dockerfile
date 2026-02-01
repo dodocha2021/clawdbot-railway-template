@@ -62,6 +62,19 @@ RUN pnpm build
 ENV OPENCLAW_PREFER_PNPM=1
 RUN pnpm ui:install && pnpm ui:build
 
+# Patch: Ensure workspace templates are available
+# The onboard process requires AGENTS.md template
+RUN set -eux; \
+  mkdir -p ./docs/reference/templates; \
+  if [ ! -f "./docs/reference/templates/AGENTS.md" ]; then \
+    echo "# Agent Instructions" > ./docs/reference/templates/AGENTS.md; \
+    echo "" >> ./docs/reference/templates/AGENTS.md; \
+    echo "This file contains instructions for the AI agent." >> ./docs/reference/templates/AGENTS.md; \
+    echo "[patch] Created minimal AGENTS.md template"; \
+  else \
+    echo "[patch] AGENTS.md template already exists"; \
+  fi
+
 
 # Runtime image
 FROM node:22-bookworm
